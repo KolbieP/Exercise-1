@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
+
 
 function WeatherApp() {
   const [unit, setUnit] = useState('C'); // 'C' for Celsius, 'F' for Fahrenheit
@@ -25,94 +29,94 @@ function WeatherApp() {
 
   const selectedWeather = weatherData.find((data) => data.city === selectedCity);
 
+  const [selectedSegment, setSelectedSegment] = useState(0);
+
+
   return (
-    <div style={styles.container}>
-      <h1 style={styles.header}>Weather App</h1>
-      <button onClick={toggleUnit} style={styles.toggleButton}>
-        Toggle to {unit === 'C' ? 'Fahrenheit' : 'Celsius'}
-      </button>
-      <div style={styles.selectorContainer}>
-        <label htmlFor="citySelector" style={styles.label}>
-          Select a city:
-        </label>
-        <select
-          id="citySelector"
-          value={selectedCity}
-          onChange={handleCityChange}
-          style={styles.selector}
-        >
-          {weatherData.map((data, index) => (
-            <option key={index} value={data.city}>
-              {data.city}
-            </option>
-          ))}
-        </select>
-      </div>
-      {selectedWeather ? (
-        <div style={styles.weatherCard}>
-          <p style={styles.city}>{selectedWeather.city}</p>
-          <p style={styles.condition}>{selectedWeather.condition}</p>
-          <p style={styles.temperature}>
-            {convertTemperature(selectedWeather.temperatureC)}°{unit}
-          </p>
-        </div>
-      ) : (
-        <p style={styles.loading}>No weather data available</p>
-      )}
-    </div>
+    <View style={styles.container}>
+      <Text style={styles.header}>Weather App</Text>
+      <Button 
+          onPress={() => toggleUnit()} 
+          title={`Toggle to ${unit === 'C' ? 'Fahrenheit' : 'Celsius'}`}
+          style={styles.toggleButton}
+        />
+    <View style={styles.container}>
+      <SegmentedControl
+        values={['Saskatoon', 'Regina', 'Prince Albert']}
+        selectedIndex={selectedSegment}
+        onChange={(event) => {
+          setSelectedSegment(event.nativeEvent.selectedSegmentIndex);
+          handleCityChange({ target: { value: ['Saskatoon', 'Regina', 'Prince Albert'][event.nativeEvent.selectedSegmentIndex] } });
+        }}
+      />
+      <StatusBar style="auto" />
+    </View>
+    {selectedWeather ? (
+    <View style={styles.weatherCard}>
+        <Text style={styles.city}>{selectedWeather.city}</Text>
+        <Text style={styles.condition}>{selectedWeather.condition}</Text>
+        <Text style={styles.temperature}>{convertTemperature(selectedWeather.temperatureC)}°{unit}</Text>
+    </View>
+    ) : (
+      <Text style={styles.loading}>No weather data available</Text>
+    )}
+    </View>
   );
 }
 
-const styles = {
+const styles = StyleSheet.create ({
   container: {
     fontFamily: 'Arial, sans-serif',
     textAlign: 'center',
-    padding: '20px',
+    padding: 20,
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
   },
   header: {
-    fontSize: '2rem',
-    marginBottom: '20px',
+    fontSize: 25,
+    marginBottom: 20,
   },
   toggleButton: {
-    padding: '10px 20px',
-    marginBottom: '20px',
+    padding: 15,
+    marginBottom: 20,
     cursor: 'pointer',
   },
   selectorContainer: {
-    marginBottom: '20px',
+    marginBottom: 20,
   },
   label: {
-    marginRight: '10px',
-    fontSize: '1rem',
+    marginRight: 10,
+    fontSize: 16,
   },
   selector: {
-    padding: '5px',
-    fontSize: '1rem',
+    padding: 5,
+    fontSize: 16,
   },
   weatherCard: {
     border: '1px solid #ccc',
-    borderRadius: '5px',
-    padding: '15px',
+    borderRadius: 5,
+    padding: 15,
     margin: '10px auto',
-    width: '200px',
+    width: 200,
     textAlign: 'left',
   },
   city: {
-    fontSize: '1.2rem',
+    fontSize: 18,
     fontWeight: 'bold',
   },
   condition: {
-    fontSize: '1rem',
+    fontSize: 16,
     color: '#555',
   },
   temperature: {
-    fontSize: '1.1rem',
+    fontSize: 18,
     color: '#333',
   },
   loading: {
-    fontSize: '1rem',
+    fontSize: 16,
     color: '#999',
   },
-};
+});
 
 export default WeatherApp;
