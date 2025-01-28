@@ -34,72 +34,72 @@ function WeatherApp() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Weather App</Text>
-      <Button 
+        <Text style={styles.header}>Weather App</Text>
+        <View style={styles.toggleButton}>
+        <Button 
           onPress={() => toggleUnit()} 
           title={`Toggle to ${unit === 'C' ? 'Fahrenheit' : 'Celsius'}`}
-          style={styles.toggleButton}
+          color="#666" 
         />
-    <View style={styles.container}>
-      <SegmentedControl
-        values={['Saskatoon', 'Regina', 'Prince Albert']}
-        selectedIndex={selectedSegment}
-        onChange={(event) => {
-          setSelectedSegment(event.nativeEvent.selectedSegmentIndex);
-          handleCityChange({ target: { value: ['Saskatoon', 'Regina', 'Prince Albert'][event.nativeEvent.selectedSegmentIndex] } });
-        }}
-      />
-      <StatusBar style="auto" />
-    </View>
-    {selectedWeather ? (
-    <View style={styles.weatherCard}>
-        <Text style={styles.city}>{selectedWeather.city}</Text>
-        <Text style={styles.condition}>{selectedWeather.condition}</Text>
-        <Text style={styles.temperature}>{convertTemperature(selectedWeather.temperatureC)}°{unit}</Text>
-    </View>
-    ) : (
-      <Text style={styles.loading}>No weather data available</Text>
-    )}
+        </View>
+      <View style={styles.selectorContainer}>
+        <Text style={styles.label}>Select a city: </Text>
+        <SegmentedControl
+          values={['Saskatoon', 'Regina', 'Prince Albert']}
+          selectedIndex={selectedSegment}
+          onChange={(event) => {
+            setSelectedSegment(event.nativeEvent.selectedSegmentIndex);
+            handleCityChange({ target: { value: ['Saskatoon', 'Regina', 'Prince Albert'][event.nativeEvent.selectedSegmentIndex] } });
+          }}
+        />
+        <StatusBar style="auto" />
+      </View>
+      {selectedWeather ? (
+        <View style={styles.weatherCard}>
+            <Text style={styles.city}>{selectedWeather.city}</Text>
+            <Text style={styles.condition}>{selectedWeather.condition}</Text>
+            <Text style={styles.temperature}>{convertTemperature(selectedWeather.temperatureC)}°{unit}</Text>
+        </View>
+      ) : (
+        <Text style={styles.loading}>No weather data available</Text>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create ({
   container: {
-    fontFamily: 'Arial, sans-serif',
-    textAlign: 'center',
     padding: 20,
     flex: 1,
     backgroundColor: '#fff',
     justifyContent: 'center',
   },
   header: {
-    fontSize: 25,
+    fontSize: 30,
     marginBottom: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   toggleButton: {
     padding: 15,
     marginBottom: 20,
-    cursor: 'pointer',
   },
   selectorContainer: {
     marginBottom: 20,
   },
   label: {
-    marginRight: 10,
-    fontSize: 16,
-  },
-  selector: {
-    padding: 5,
+    marginVertical: 10,
     fontSize: 16,
   },
   weatherCard: {
-    border: '1px solid #ccc',
+    borderWidth: 1,
+    borderColor: '#ccc',
     borderRadius: 5,
     padding: 15,
-    margin: '10px auto',
+    marginVertical: 10,
+    alignSelf: 'center',
     width: 200,
-    textAlign: 'left',
+    alignItems: 'left',
   },
   city: {
     fontSize: 18,
